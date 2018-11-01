@@ -6,13 +6,13 @@ exports.startGame = function (socketIo, socket) {
 
   // Server(spectator)
   socket.on('newGame', newGame)
-  socket.on('hostRoomFull', loadGame)
-  socket.on('countDownFinished', startGame)
-  socket.on('nextRound', startNextRound)
+  // socket.on('hostRoomFull', loadGame)
+  // socket.on('countDownFinished', startGame)
+  // socket.on('nextRound', startNextRound)
 
   // Player events
-  socket.on('newPlayer', newPlayer)
-  socket.on('restart', restart)
+  // socket.on('newPlayer', newPlayer)
+  // socket.on('restart', restart)
 }
 
 function newGame () {
@@ -22,56 +22,56 @@ function newGame () {
   this.join(newGameId.toString())
 }
 
-function loadGame (gameID) {
-  var thisSocket = this
-  var data = {
-    mySocketId: thisSocket.id,
-    gameID: gameID
-  }
-  console.log('All players online. Let\'s do this')
-  io.sockets.in(data.gameID).emit('beginNewGame', data)
-}
+// function loadGame (gameID) {
+//   var thisSocket = this
+//   var data = {
+//     mySocketId: thisSocket.id,
+//     gameID: gameID
+//   }
+//   console.log('All players online. Let\'s do this')
+//   io.sockets.in(data.gameID).emit('beginNewGame', data)
+// }
 
-function startGame (gameID) {
-  console.log('Let the game begin')
-  sendCards(0, gameID)
-}
+// function startGame (gameID) {
+//   console.log('Let the game begin')
+//   sendCards(0, gameID)
+// }
 
-function startNextRound (data) {
-  if (data.round < 12) {
-    sendCards(data.round, data.gameID)
-  } else {
-    io.sockets.in(data.gameID).emit('You died', data)
-  }
-}
+// function startNextRound (data) {
+//   if (data.round < 12) {
+//     sendCards(data.round, data.gameID)
+//   } else {
+//     io.sockets.in(data.gameID).emit('You died', data)
+//   }
+// }
 
-function newPlayer (data) {
-  console.log('Player ' + data.playerName + 'attempting to join game: ' + data.gameID)
-  var socket = this
+// function newPlayer (data) {
+//   console.log('Player ' + data.playerName + 'attempting to join game: ' + data.gameID)
+//   var socket = this
 
-  var room = socket.manager.rooms['/' + data.gameID]
+//   var room = socket.manager.rooms['/' + data.gameID]
 
-  if (room !== undefined) {
-    // Attach socketID to game object.
-    data.mySocketId = socket.id
-    // Join the room
-    socket.join(data.gameID)
-    console.log('Player ' + data.playerName + ' joining game: ' + data.gameID)
+//   if (room !== undefined) {
+//     // Attach socketID to game object.
+//     data.mySocketId = socket.id
+//     // Join the room
+//     socket.join(data.gameID)
+//     console.log('Player ' + data.playerName + ' joining game: ' + data.gameID)
 
-    io.sockets.in(data.gameID).emit('playerJoinedRoom', data)
-  } else {
-    this.emit('error', {message: 'This room does not exist'})
-  }
-}
+//     io.sockets.in(data.gameID).emit('playerJoinedRoom', data)
+//   } else {
+//     this.emit('error', {message: 'This room does not exist'})
+//   }
+// }
 
-function restart (data) {
-  console.log('Player: ' + data.playerName + ' ready for new game.')
+// function restart (data) {
+//   console.log('Player: ' + data.playerName + ' ready for new game.')
 
-  data.playerId = this.id
-  io.sockets.in(data.gameID).emit('playerJoinedRoom', data)
-}
+//   data.playerId = this.id
+//   io.sockets.in(data.gameID).emit('playerJoinedRoom', data)
+// }
 
-function sendCards (index, gameID) {
-  var data = 'Hello this is your message'
-  io.sockets.in(data.gameID).emit('newMessage', data)
-}
+// function sendCards (index, gameID) {
+//   var data = 'Hello this is your message'
+//   io.sockets.in(data.gameID).emit('newMessage', data)
+// }
