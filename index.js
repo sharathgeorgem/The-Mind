@@ -8,8 +8,9 @@ var server = require('http').Server(app)
 
 server.listen(8080, () => {
   console.log('Server running at 8080')
-})
-
+}) // put it in variable
+// React router
+// React router video
 var io = require('socket.io').listen(server)
 
 app.use(express.static(path.join(__dirname, 'public')))
